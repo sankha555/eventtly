@@ -53,9 +53,10 @@
                             <div id="usernameForm" class="animated faster" data-next="checkUsername">
                                 {% csrf_token %}
                                 <fieldset class="form-group">
-                                    <div class="form-group">
-                                        <label class="control-label">Username</label>
-                                        <input type="text" class="form-control" name="username" value="" id="username" placeholder="Username">              
+                                    {{ form|crispy }}
+                                    <!--<div class="form-group">
+                                        <label class="control-label">Email</label>
+                                        <input type="email" class="form-control" name="email" value="" id="email" placeholder="Email">              
                                     </div>
                                 
                                 <div class="form-group">
@@ -63,7 +64,7 @@
                                     <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                                     <br>
                                     <input type="checkbox" onclick="myFunction()"> Show Password
-                                </div> 
+                                </div> -->
                                     
                                 </fieldset>
                                 <div class="form-group">

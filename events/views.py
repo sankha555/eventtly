@@ -2,10 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from events.models import Event, Registration
-from users.models import Creator
+from users.models import Creator, CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.contrib import messages
 from events.forms import EventRegistrationForm, TemplateForm, RegistrationForm
 from allauth.socialaccount.models import SocialAccount
@@ -18,7 +18,7 @@ def index(request):
 def dashboard(request):
     
     user = request.user
-    emails = [u.email for u in User.objects.all()]
+    emails = [u.email for u in CustomUser.objects.all()]
     try:
         creator = Creator.objects.get(user = user)
     except:

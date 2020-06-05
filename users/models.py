@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from PIL import Image
 from django.conf import settings
 
-
+'''
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None, is_admin=False, is_staff=False, is_active=True):
         if not email:
@@ -17,13 +17,26 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email)
         )
         user.name = name
-        user.admin = is_admin
-        user.staff = is_staff
-        user.active = is_active
+        user.password = password
+        user.is_admin = is_admin
+        user.is_staff = is_staff
+        user.is_active = is_active
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, profile_picture, password=None, **extra_fields):
+    def create_staffuser(self, email, name, password=None):
+        user = self.model(
+            email=self.normalize_email(email)
+        )
+        user.name = name,
+        user_role=user_role
+        user.password=password
+        user.is_staff=True
+        user.is_active=True
+        user.is_superuser=True
+        return user
+
+    def create_superuser(self, email, name, password=None, **extra_fields):
         if not email:
             raise ValueError("User must have an email")
         if not password:
@@ -35,20 +48,22 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email)
         )
         user.name = name
+        user.password = password
         user.admin = True
-        user.staff = True
-        user.active = is_active
+        user.is_staf = True
+        user.is_superuser = True
+        user.is_active = True
         user.save(using=self._db)
         return user
-
+'''
 
 
 class CustomUser(AbstractUser):
-    username = None
+    username = models.CharField(max_length=255, blank = True, null = True, default = "user")
     name = models.CharField(verbose_name = "Name", max_length=50)
     email = models.EmailField(verbose_name = "Email", max_length=254, unique = True)
     
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name']
     USERNAME_FIELD = 'email'
 
 
