@@ -1,11 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, User
 from PIL import Image
 from django.conf import settings
 
-'''
+
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None, is_admin=False, is_staff=False, is_active=True):
+    def create_user(self, email, name, username, password=None, is_admin=False, is_staff=False, is_active=True):
         if not email:
             raise ValueError("User must have an email")
         if not password:
@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email)
         )
+        user.username = username
         user.name = name
         user.password = password
         user.is_admin = is_admin
@@ -24,10 +25,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_staffuser(self, email, name, password=None):
+    def create_staffuser(self, email, name, username, password=None):
         user = self.model(
             email=self.normalize_email(email)
         )
+        user.username = username
         user.name = name,
         user_role=user_role
         user.password=password
@@ -36,7 +38,7 @@ class UserManager(BaseUserManager):
         user.is_superuser=True
         return user
 
-    def create_superuser(self, email, name, password=None, **extra_fields):
+    def create_superuser(self, email, name, username, password=None, **extra_fields):
         if not email:
             raise ValueError("User must have an email")
         if not password:
@@ -47,6 +49,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email)
         )
+        user.username = username
         user.name = name
         user.password = password
         user.admin = True
@@ -55,7 +58,7 @@ class UserManager(BaseUserManager):
         user.is_active = True
         user.save(using=self._db)
         return user
-'''
+
 
 
 class CustomUser(AbstractUser):
@@ -65,6 +68,11 @@ class CustomUser(AbstractUser):
     
     REQUIRED_FIELDS = ['username', 'name']
     USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return self.email
+
+    objects = UserManager()
 
 
 class Creator(models.Model):

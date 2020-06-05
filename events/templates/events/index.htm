@@ -5,7 +5,11 @@
     <div class="container text-center position-relative">
       <h1>60 SECONDS OR LESS</h1>
       <h2>Create your event webpage</h2>
-      <a href="{% url 'create_event' %}" class="btn-get-started scrollto">POST YOUR EVENT</a>
+      {% if user.is_autheniticated %}
+        <a href="{% url 'create_event' %}" class="btn-get-started scrollto">POST YOUR EVENT</a>
+      {% else %}
+        <a href="{% url 'register' %}"class="btn-get-started scrollto">POST YOUR EVENT</a>
+      {% endif %} 
     </div>
   </section>
 

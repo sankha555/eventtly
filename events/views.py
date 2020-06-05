@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.http import HttpResponseRedirect
 from events.models import Event, Registration
@@ -10,6 +10,10 @@ from django.contrib import messages
 from events.forms import EventRegistrationForm, TemplateForm, RegistrationForm
 from allauth.socialaccount.models import SocialAccount
 from django import forms
+import hashlib
+from django.utils.encoding import force_text
+import random
+
 
 def index(request):
     return render(request, 'events/index.htm')
@@ -55,11 +59,24 @@ class EventCreateView(LoginRequiredMixin, CreateView):
     template_name = 'events/event_form.htm'
     
     def get_success_url(self):
-        return reverse('customise_reg_form',args=(self.object.id))
+        return reverse('customise_reg_form', kwargs={'url': self.object.url})
 
     def form_valid(self, form):
         form.instance.creator = self.request.user.creator
-        form.instance.url = self.request.user.username + form.cleaned_data['title']
+        form.instance.url = self.request.user.email.split('@')[0] + '_' + form.cleaned_data['title'].replace(" ", "-")
+        
+        flag = 0
+        while flag == 0:
+            hash_attempt = force_text(str(hex(random.randint(0,16777215))))
+            if Event.objects.filter(hashed_url = hash_attempt).exists():
+                hash_attempt = force_text(random_hex(20))
+                flag = 0
+            else:
+                flag = 1
+                break
+
+        form.instance.hashed_url = hash_attempt
+
         return super().form_valid(form)
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -136,8 +153,8 @@ def my_events(request):
     return redirect('dashboard')
 
 @login_required
-def view_registrations(request, pk):
-    event = get_object_or_404(Event, pk = pk)
+def view_registrations(request, url):
+    event = get_object_or_404(Event, url = url)
     if event.creator != request.user.creator:
         messages.error(request, "Unauthorised access!")
         return redirect('dashboard')
@@ -150,8 +167,8 @@ def view_registrations(request, pk):
     
 
 @login_required
-def customise_reg_form(request, pk):
-    event = get_object_or_404(Event, pk = pk)
+def customise_reg_form(request, url):
+    event = get_object_or_404(Event, url = url)
     if request.method == "POST":
         form = TemplateForm(request.POST, instance = event)
         if form.is_valid():
@@ -188,7 +205,18 @@ def custom_register_for_event(request, pk):
     
     return render(request, 'events/register_for_event.htm', {'form' : form, 'event' : event})
     
+def view_event(request, url):
+    event = get_object_or_404(Event, url = url)
+    return render(request, "events/event_detail.htm", {'object' : event})
 
-    
+def view_event_by_hashed_url(request, hashed_url):
+
+    hashed = request.path_info
+    hashed_url = hashed.strip('/')
+    hashed_list = hashed_url.split('/')
+
+    event = get_object_or_404(Event, hashed_url = hashed_list[-1])
+
+    return redirect('view_event', event.url)
     
 # Create your views here.

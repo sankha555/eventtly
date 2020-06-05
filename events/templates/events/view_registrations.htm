@@ -9,10 +9,18 @@
             <table>
               <tr>
                 <td width="80%">
+                  {% if event.req_name %}
                   <h6>Name - {{ reg.name }}</h6>
+                  {% endif %}
+                  {% if event.req_college %}
                   <p class="article-content">College - {{ reg.college }}</p>
+                  {% endif %}
+                  {% if event.req_phone %}
                   <p class="article-content">Phone - {{ reg.phone }}</p>
+                  {% endif %}
+                  {% if event.req_email %}
                   <p class="article-content">Email - {{ reg.email }}</p>
+                  {% endif %}
                 </td>
                 <td>
                   <img src ="{{ reg.image.url }}" width=150px, height=150px, style="margin-right:18px; margin-top: 10px; margin-bottom: 20px;">

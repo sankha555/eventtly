@@ -11,7 +11,8 @@ class Event(models.Model):
     time = models.TimeField(verbose_name = "Event Time", auto_now=False)
     
     poster = models.ImageField(upload_to="posters", default="default_poster.png")
-    url = models.CharField(max_length=50)
+    url = models.CharField(max_length=50, null = True, blank = True)
+    hashed_url = models.CharField(max_length=8, null = True, blank = True)
 
     registrations = models.IntegerField(default = 0)
 
@@ -34,10 +35,10 @@ class Event(models.Model):
 
 class Registration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name = "Participant Name", max_length=50, default = "")
-    phone = models.CharField(verbose_name = "Participant Mobile", max_length=14, default = "")
-    email = models.EmailField(verbose_name = "Participant Email", max_length=100, default = "")
-    college = models.CharField(verbose_name = "Participant College", max_length=100, default = "")
+    name = models.CharField(verbose_name = "Participant Name", max_length=50, default = " ")
+    phone = models.CharField(verbose_name = "Participant Mobile", max_length=14, default = " ")
+    email = models.EmailField(verbose_name = "Participant Email", max_length=100, default = " ")
+    college = models.CharField(verbose_name = "Participant College", max_length=100, default = " ")
     image = models.ImageField(upload_to="participants", default="default_user.png")
     date = models.DateTimeField(auto_now=True)
 

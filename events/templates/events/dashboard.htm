@@ -11,10 +11,11 @@
             <div class="article-metadata">              
               <small class="text-muted">{{ event.created_on }}</small>
             </div>
-            <h2><a class="article-title" href="{% url 'event_detail' event.id %}"> {{ event.title }}</a></h2>
+            <h2><a class="article-title" href="{% url 'view_event' event.url %}"> {{ event.title }}</a></h2>
             <p class="article-content">{{ event.description|truncatewords:25 }} ...</p>
             <h5>Date and Time - {{ event.date }}, {{ event.time }}</h5>
-            <h5><a href="{% url 'view_registrations' event.id %}">Registrations - {{ event.registrations }}</a></h5>
+            <h5><a href="{% url 'view_registrations' event.url %}">Registrations - {{ event.registrations }}</a></h5>
+            <p>https://evenntly.herokuapp.com/events/{{ event.hashed_url }}</p>
           </div>
         </article>
     {% empty %}
