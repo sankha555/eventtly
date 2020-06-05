@@ -1,0 +1,85 @@
+{% extends "users/base_logins.htm" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!--<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
+<head>     
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Log In to Evennt.ly</title>
+    <link href="../../static/users/assets/css/login.css" rel="stylesheet">
+    <link href="../../static/users/assets/css/style.css" rel="stylesheet">
+   
+    <meta name="description" content="Publish your event to the World">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../static/users/assets/css/animate.min.css" integrity="sha384-7/Tl0k65OTvDSvtuq7aPR7aa0aCz7ZKqHsbMRLxhzueldW+9MZpCe9LB1c5UBuNS" crossorigin="anonymous">
+    <link href="./assets/css/style.css" rel="stylesheet">
+    <link href="./assets/img/favicon.png" rel="icon">
+
+    <script>
+        function myFunction() {
+                var x = document.getElementById("password");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
+    </script>
+</head>
+
+        <div class="page" >
+            <div id="whitebox" class="loginForm">
+                <div id="message" class="loginForm__statusMessage"></div>
+                <div class="loginForm__formContainer">
+                    <img class="loginForm__logo" src="../../static/users/assets/img/logo.png" alt="evenntly" width = 100 height = 40>                
+
+                    <div id="headlineContainer" class="loginForm__headlineContainer">
+                        <h1 id="headline" class="loginForm__headline">Welcome back!</h1>
+                    </div>
+                    <form id="submitForm" class="loginForm__form" method="POST">
+                        <div id="content" class="loginForm__content">
+                            <div id="usernameForm" class="animated faster" data-next="checkUsername">
+                                {% load socialaccount %}
+                                <div>
+                                    <a href="{% provider_login_url 'google' %}" class="google-sign-up google-register"> <!--Add Auth here-->
+                                        <img src="../../static/users/assets/img/google-log-icon.png" width=30 height=30>
+                                        <span>Sign In with Google</span>
+                                    </a>
+                                </div>
+                            <div class="google-or-form">OR</div>
+                                
+                            <!--<form method="POST">-->
+                            <div id="usernameForm" class="animated faster" data-next="checkUsername">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Username</label>
+                                        <input type="text" class="form-control" name="username" value="" id="username" placeholder="Username">              
+                                    </div>
+                                
+                                <div class="form-group">
+                                    <label class="control-label">Password</label>          
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                    <br>
+                                    <input type="checkbox" onclick="myFunction()"> Show Password
+                                </div> 
+                                    
+                                </fieldset>
+                                <div class="form-group">
+                                    <button  class="loginForm__button" type="submit">Log In</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!--<button type="submit" class="loginForm__button">Login</button>-->
+                    </form>                   
+                </div>
+            </div>
+            
+        </div>
+        <div class="signup">
+            Don't have an account yet? <a class="signup__link" href="{% url 'register' %}">Sign up Here</a>
+        </div>
+{% endblock content %}
+<!--</body></html>-->

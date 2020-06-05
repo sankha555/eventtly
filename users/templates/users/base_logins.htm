@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  {% if title %}
+    <title>{{ title }}</title:>
+  {% else %}
+    <title>Evennt.ly | Events pulishing made easy</title>
+  {% endif %}
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'users/assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'users/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'users/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'users/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'users/assets/css/style.css' %}" rel="stylesheet">
+  <script src="{% static 'users/assets/js/main.js' %}"></script>
+</head>
+
+<body>
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" style="width: 1415px; margin-left: 10px;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <center>{{ message }}</center>
+  </div>
+  {% endfor %}
+ 
+  {% block content %}{% endblock %}
+      
+
+<!-- ======= Footer ======= -->
+<footer id="footer">
+  <div class="container d-md-flex py-4">
+
+    <div class="mr-md-auto text-center text-md-left">
+      <div class="copyright">
+        &copy; Copyright <strong><span>evennt.ly 2020</span></strong>. All Rights Reserved
+      </div>
+    </div>
+    <div class="social-links text-center text-md-right pt-3 pt-md-0">
+      <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+      <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+      <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+    </div>
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'users/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'users/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'users/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'users/vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'users/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'users/vendor/counterup/counterup.min.js' %}"></script>
+<script src="{% static 'users/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'users/vendor/venobox/venobox.min.js' %}"></script>
+<script src="{% static 'users/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+<script src="{% static 'users/vendor/aos/aos.js' %}"></script>
+
+<script src="{% static 'users/js/main.js' %}"></script>
+
+
+</body>
+</html>

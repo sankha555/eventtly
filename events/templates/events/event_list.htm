@@ -1,0 +1,20 @@
+{% extends "users/base.htm" %}
+{% block content %}
+    <hr>
+    <h3>Upcoming Events</h3>
+    {% for event in events %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">              
+              <small class="text-muted">{{ event.created_on }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'event_detail' event.id %}"> {{ event.title }}</a></h2>
+            <p class="article-content">{{ event.description|truncatewords:25 }} ...</p>
+            <h5>Date and Time - {{ event.date }}, {{ event.time }}</h5>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'register_for_event' event.id %}">Register For Event</a>
+          </div>
+        </article>
+    {% empty %}
+        <h4>No active events available to register now. <a href="{% url 'create_event' %}">Create one now!</a></h4>
+    {% endfor %}
+{% endblock content %}

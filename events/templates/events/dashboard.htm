@@ -1,0 +1,23 @@
+{% extends "users/base.htm" %}
+{% block content %}
+    <h2>My Events</h2>
+    <hr>
+    {% if events.count %}
+      <h4>Events Created - {{ events.count }}</h4>
+    {% endif %}
+    {% for event in events %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">              
+              <small class="text-muted">{{ event.created_on }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'event_detail' event.id %}"> {{ event.title }}</a></h2>
+            <p class="article-content">{{ event.description|truncatewords:25 }} ...</p>
+            <h5>Date and Time - {{ event.date }}, {{ event.time }}</h5>
+            <h5><a href="{% url 'view_registrations' event.id %}">Registrations - {{ event.registrations }}</a></h5>
+          </div>
+        </article>
+    {% empty %}
+        <h4>You Haven't Created any events so far. <a href="{% url 'create_event' %}">Create one now!</a></h4>
+    {% endfor %}
+{% endblock content %}

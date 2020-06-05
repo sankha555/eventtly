@@ -1,0 +1,28 @@
+{% extends "users/base.htm" %}
+{% block content %}
+    <h2>Registrations for Event <b>{{ event.title }}</b></h2>
+    <hr>
+    {% for reg in regs %}
+        <article class="media content-section">
+          <div class="media-body">
+
+            <table>
+              <tr>
+                <td width="80%">
+                  <h6>Name - {{ reg.name }}</h6>
+                  <p class="article-content">College - {{ reg.college }}</p>
+                  <p class="article-content">Phone - {{ reg.phone }}</p>
+                  <p class="article-content">Email - {{ reg.email }}</p>
+                </td>
+                <td>
+                  <img src ="{{ reg.image.url }}" width=150px, height=150px, style="margin-right:18px; margin-top: 10px; margin-bottom: 20px;">
+                </td>
+              </tr>
+            </table>
+            
+          </div>
+        </article>
+    {% empty %}
+        <h5>You haven't received any registrations for this event so far.</h5>
+    {% endfor %}
+{% endblock content %}

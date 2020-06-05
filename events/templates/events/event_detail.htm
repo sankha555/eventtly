@@ -1,0 +1,30 @@
+{% extends "users/base.htm" %}
+{% block content %}
+{% include "base/js.htm"%}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <small class="text-muted">Announced on {{ object.created_on }}</small>
+      </div>
+      <h2 class="article-title">{{ object.title }}</h2>
+      <p class="article-content">Hosted by {{ object.creator.first_name }} {{ object.creator.last_name }}</p>
+
+      <img src ="{{ object.poster.url }}" width=690px, height=330px, style="margin-right:18px; margin-top: 10px; margin-bottom: 20px;">
+
+      <br>
+      <p class="article-content"><b>Description</b> <br> {{ object.description }}</p>
+      
+
+      <b><h6>Date and Time - <u>{{ object.date }}, {{ object.time }}</u></h6></b>
+      <br>
+      <a class="btn btn-outline-info" href="{% url 'register_for_event' object.id %}">Register For Event</a>
+      <br><br>
+      {% if object.creator == user.creator %}
+        <div>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update_event' object.id %}">Update</a>
+          <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'delete_event' object.id %}">Delete</a>
+        </div>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}
