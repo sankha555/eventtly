@@ -63,7 +63,7 @@ class CustomUser(AbstractUser):
     name = models.CharField(verbose_name = "Name", max_length=50)
     email = models.EmailField(verbose_name = "Email", max_length=254, unique = True)
     
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username', 'name']
     USERNAME_FIELD = 'email'
 
 
