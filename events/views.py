@@ -20,8 +20,6 @@ def index(request):
     events = Event.objects.all()
     regs = Registration.objects.all()
 
-    #trending_events = Event.objects.filter(event.registrations >= 5)
-
     context = {
         'users' : users,
         'events' : events,
@@ -79,8 +77,12 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.creator = self.request.user.creator
-        form.instance.url = self.request.user.email.split('@')[0] + '_' + form.cleaned_data['title'].replace(" ", "-")
-        
+        if self.request.user.email:
+            form.instance.url = self.request.user.email.split('@')[0] + '_' + form.cleaned_data['title'].replace(" ", "-")
+        else:
+            form.instance.url = self.request.user.creator.first_name + '_' + form.cleaned_data['title'].replace(" ", "-")
+
+
         flag = 0
         while flag == 0:
             hash_attempt = force_text(str(hex(random.randint(0,16777215))))
@@ -227,6 +229,8 @@ def custom_register_for_event(request, url):
     
 def view_event(request, url):
     event = get_object_or_404(Event, url = url)
+    event.page_visits += 1
+    event.save()
     return render(request, "events/event_detail.htm", {'object' : event})
 
 def view_event_by_hashed_url(request, hashed_url):
@@ -236,6 +240,8 @@ def view_event_by_hashed_url(request, hashed_url):
     hashed_list = hashed_url.split('/')
 
     event = get_object_or_404(Event, hashed_url = hashed_list[-1])
+    event.page_visits += 1
+    event.save()
 
     return redirect('view_event', event.url)
     

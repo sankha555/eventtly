@@ -26,6 +26,53 @@
                 }
             }
     </script>
+
+    <style>
+        .button.social-susi-btn {
+            text-decoration: none;
+            padding-top: 3px;
+            border: 0;
+            width: 150px;
+        }
+
+        .button.susi-btn {
+            width: 152px;
+            color: white;
+            background-color: #2a5bd7;
+            font-size: 15px;
+            box-shadow: none;
+            border: 0px solid #000;
+            height: 40px;
+            padding: 0;
+            line-height: 36px;
+        }
+        .button {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            padding: 8px 16px;
+            margin: 0;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 20px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            text-rendering: optimizelegibility;
+            background: #fff;
+        }
+        .social-sign-in {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 15px;
+        }
+        .social-sign-in {
+            text-align: center;
+            color: white;
+            
+        }
+    </style>
 </head>
 
         <div class="page" >
@@ -37,44 +84,57 @@
                     <div id="headlineContainer" class="loginForm__headlineContainer">
                         <h1 id="headline" class="loginForm__headline">Welcome back!</h1>
                     </div>
-                    <form id="submitForm" class="loginForm__form" method="POST">
+
+                    <form action="{% url 'login' %}" id="submitForm" class="loginForm__form" method="POST">
                         <div id="content" class="loginForm__content">
                             <div id="usernameForm" class="animated faster" data-next="checkUsername">
                                 {% load socialaccount %}
-                                <div>
-                                    <a href="{% provider_login_url 'google' %}" class="google-sign-up google-register"> <!--Add Auth here-->
-                                        <img src="../../static/users/assets/img/google-log-icon.png" width=30 height=30>
-                                        <span>Sign In with Google</span>
+                                {% providers_media_js %}
+                                <h4 id="headline" class="loginForm__headline" style="font-size: 18px; text-align: center;">Log in with</h4>
+                                <br>
+                                <div class="social-sign-in">
+                                    
+                                    <a href="{% provider_login_url 'google' %}" class="susi-btn social-susi-btn button" data-network="google">
+                                        <img src="//d1ayxb9ooonjts.cloudfront.net/518ec586a1814c0216f44b4844b86f5e.svg" alt="Google" width="20">
+                                        <span class="sign-up-text">&nbspGoogle</span>
+                                    </a>
+                                    <a href="{% provider_login_url 'facebook' method='js_sdk' %}" class="susi-btn social-susi-btn button">
+                                        <img src="//d1ayxb9ooonjts.cloudfront.net/81a8d0e017721a03c0ca3e1133b93592.svg" alt="Facebook" width="20">   
+                                        <span class="sign-up-text">&nbspFacebook</span>
                                     </a>
                                 </div>
+                                <br>
                             <div class="google-or-form">OR</div>
                                 
-                            <!--<form method="POST">-->
                             <div id="usernameForm" class="animated faster" data-next="checkUsername">
-                                {% csrf_token %}
-                                <fieldset class="form-group">
-                                    {{ form|crispy }}
-                                    <!--<div class="form-group">
-                                        <label class="control-label">Email</label>
-                                        <input type="email" class="form-control" name="email" value="" id="email" placeholder="Email">              
+                                
+                                    <fieldset class="form-group">
+                                        {% csrf_token %}
+                                        {{form|crispy }}
+                                        <!--<input type="hidden" name="_token" value="WMpaeKwHpcZK5HGS0xCTCyLU7k4zy7bXkJbuuMcs">
+                                        
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input type="email" class="form-control" name="email" value="" id="email" placeholder="Email">              
+                                        </div>
+                                    
+                                        <div class="form-group">
+                                            <label class="control-label">Password</label>          
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                        </div> 
+
+                                        <input type="checkbox" onclick="myFunction()"> Show Password
+                                        -->
+                                    </fieldset>
+                                    <div class="form-group">
+                                        <button class="loginForm__button" type="submit">Log In</button>
                                     </div>
                                 
-                                <div class="form-group">
-                                    <label class="control-label">Password</label>          
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-                                    <br>
-                                    <input type="checkbox" onclick="myFunction()"> Show Password
-                                </div> -->
-                                    
-                                </fieldset>
-                                <div class="form-group">
-                                    <button  class="loginForm__button" type="submit">Log In</button>
-                                </div>
                             </div>
                             
                         </div>
-                        <!--<button type="submit" class="loginForm__button">Login</button>-->
-                    </form>                   
+                        
+                    </form>                 
                 </div>
             </div>
             

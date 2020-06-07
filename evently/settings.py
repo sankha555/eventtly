@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google', 
+    'allauth.socialaccount.providers.facebook',
 
     'crispy_forms',
 ]
@@ -157,7 +158,29 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         }
-    }
+    },
+
+    'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email','public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'kr_KR',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v7.0'
+        }
 }
 
 SOCIAL_AUTH_PIPELINE = (
@@ -191,6 +214,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='556525835496-v95godcntfutd4nfcggscog5julccr52.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'g62ibS8g91FZ9inSQOTGSs3e'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '568015757242250'  
+SOCIAL_AUTH_FACEBOOK_SECRET ='832be2067933278bf62cb932434c1de6' 
 
 django_heroku.settings(locals())
 

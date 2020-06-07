@@ -1,12 +1,14 @@
 from django.db import models
 from users.models import Creator
 from PIL import Image
+import datetime
+import math
 
 class Event(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     title = models.CharField(verbose_name = "Event Name", max_length=50)
     description = models.TextField(verbose_name = "Event Description", max_length=400)
-    created_on = models.DateField(auto_now=True)
+    created_on = models.DateTimeField(auto_now=True)    # announcement date
     date = models.DateField(verbose_name = "Event Date", auto_now=False)
     time = models.TimeField(verbose_name = "Event Time", auto_now=False)
     last_reg_date = models.DateTimeField(auto_now=True)
@@ -26,6 +28,12 @@ class Event(models.Model):
     registrations = models.IntegerField(default = 0)
     page_visits = models.IntegerField(default = 0)
 
+    def get_popularity_index(self):
+        time_diff = datetime.datetime.now() - self.created_on 
+        hours_active = math.floor(divmod(difference.days * 24 + difference.minutes, 60)) + 0.5
+        index = self.page_visits / hours_active
+
+        return index
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
