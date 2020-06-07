@@ -13,7 +13,6 @@ import hashlib
 from django.utils.encoding import force_text
 import random
 
-
 def index(request):
 
     users = CustomUser.objects.all()
@@ -236,12 +235,15 @@ def view_event(request, url):
 def view_event_by_hashed_url(request, hashed_url):
 
     hashed = request.path_info
-    hashed_url = hashed.strip('/')
+    #hashed_url = hashed.strip('/')
     hashed_list = hashed_url.split('/')
+
+    print(hashed_list)
 
     event = get_object_or_404(Event, hashed_url = hashed_list[-1])
     event.page_visits += 1
     event.save()
+
 
     return redirect('view_event', event.url)
     
@@ -315,4 +317,3 @@ def search_events(request):
         
 
     return render(request, 'events/index.htm', {'form' : form})
-
