@@ -1,0 +1,37 @@
+{% extends "users/base.htm" %}
+{% block content %}
+
+    <h3>Search Results for <i>{{ query }}</i></h3>
+    <hr>
+    {% for event in top %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">              
+              <small class="text-muted">{{ event.created_on }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'view_event' event.url %}"> {{ event.title }}</a></h2>
+            <p class="article-content">{{ event.description|truncatewords:25 }} ...</p>
+            <h5>Date and Time - {{ event.date }}, {{ event.time }}</h5>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'register_for_event' event.url %}">Register For Event</a>
+          </div>
+        </article>
+    {% endfor %}
+  
+    {% if top.count == 0 %}
+        <h4>Sorry! Your search returned no results. However, here are some of our top events where you can register!</h4>
+        {% for event in low %}
+          <article class="media content-section">
+            <div class="media-body">
+              <div class="article-metadata">
+                <small class="text-muted">{{ event.created_on }}</small>
+              </div>
+              <h2><a class="article-title" href="{% url 'view_event' event.url %}"> {{ event.title }}</a></h2>
+              <p class="article-content">{{ event.description|truncatewords:25 }} ...</p>
+              <h5>Date and Time - {{ event.date }}, {{ event.time }}</h5>
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'register_for_event' event.url %}">Register For Event</a>
+            </div>
+          </article>
+        {% endfor %}
+    {% endif %}
+
+{% endblock content %}

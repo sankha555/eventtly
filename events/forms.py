@@ -22,4 +22,7 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
         fields = ['name', 'phone', 'email', 'college', 'image']
-    
+
+  
+class EventSearchForm(forms.Form):
+    search_query = forms.CharField(max_length=250, required=True)

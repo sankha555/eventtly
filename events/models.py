@@ -9,12 +9,11 @@ class Event(models.Model):
     created_on = models.DateField(auto_now=True)
     date = models.DateField(verbose_name = "Event Date", auto_now=False)
     time = models.TimeField(verbose_name = "Event Time", auto_now=False)
+    last_reg_date = models.DateTimeField(auto_now=True)
     
     poster = models.ImageField(upload_to="posters", default="default_poster.png")
     url = models.CharField(max_length=50, null = True, blank = True)
     hashed_url = models.CharField(max_length=8, null = True, blank = True)
-
-    registrations = models.IntegerField(default = 0)
 
     # Form Fields
     req_name = models.BooleanField(verbose_name="Name", default = True)
@@ -22,6 +21,11 @@ class Event(models.Model):
     req_email = models.BooleanField(verbose_name="Email", default = True)
     req_college = models.BooleanField(verbose_name="College", default = True)
     req_image = models.BooleanField(verbose_name="Image", default = False)
+
+    # Analytics
+    registrations = models.IntegerField(default = 0)
+    page_visits = models.IntegerField(default = 0)
+
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -52,4 +56,8 @@ class Registration(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
+'''
+class Search(models.Model):
+    search_query = models.CharField(max_length=250)
+'''
 # Create your models here.

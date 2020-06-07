@@ -5,9 +5,8 @@ from events.models import Event, Registration
 from users.models import Creator, CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-#from django.contrib.auth.models import User
 from django.contrib import messages
-from events.forms import EventRegistrationForm, TemplateForm, RegistrationForm
+from events.forms import EventRegistrationForm, TemplateForm, RegistrationForm, EventSearchForm
 from allauth.socialaccount.models import SocialAccount
 from django import forms
 import hashlib
@@ -16,7 +15,20 @@ import random
 
 
 def index(request):
-    return render(request, 'events/index.htm')
+
+    users = CustomUser.objects.all()
+    events = Event.objects.all()
+    regs = Registration.objects.all()
+
+    #trending_events = Event.objects.filter(event.registrations >= 5)
+
+    context = {
+        'users' : users,
+        'events' : events,
+        'regs' : regs,
+    }
+
+    return render(request, 'events/index.htm', context)
 
 @login_required
 def dashboard(request):
@@ -53,6 +65,10 @@ class EventDetailView(DetailView):
     template_name = 'events/event_detail.htm'
     context_object_name = 'event'
 
+    def increase_page_visits(self):
+        self.object.page_visits += 1
+        self.object.save()
+
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     fields = ['title', 'description', 'date', 'time', 'poster']
@@ -83,7 +99,9 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
     fields = ['title', 'description', 'date', 'time', 'poster']
     template_name = 'events/event_form.htm'
-    success_url = 'events/<int:pk>/form'
+    
+    def get_success_url(self):
+        return reverse('customise_reg_form', kwargs={'url': self.object.url})
 
     def form_valid(self, form):
         form.instance.creator = self.request.user.creator
@@ -105,20 +123,22 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-def register_for_event(request, pk):
-    event = get_object_or_404(Event, pk = pk)
-    #new_reg = Registration.objects.create(event = event)
+def register_for_event(request, url):
+    event = get_object_or_404(Event, url = url)
     if request.method == 'POST':
         form = EventRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.instance.event = event
             form.save()
+            
             event.registrations += 1
             event.save()
 
             messages.success(request, "Registration for Event Successful!")
             return redirect('index')
     else :
+        event.page_visits += 1
+        event.save()
         form = EventRegistrationForm()
     return render(request, 'events/register_for_event.htm', {'form' : form, 'event' : event})
 
@@ -181,8 +201,8 @@ def customise_reg_form(request, url):
     
     return render(request, 'events/customise_reg_form.htm', {'form' : form, 'event' : event})
 
-def custom_register_for_event(request, pk):
-    event = get_object_or_404(Event, pk = pk)
+def custom_register_for_event(request, url):
+    event = get_object_or_404(Event, url = url)
     if request.method == "POST":
         form = EventRegistrationForm(
             request.POST, 
@@ -219,4 +239,74 @@ def view_event_by_hashed_url(request, hashed_url):
 
     return redirect('view_event', event.url)
     
-# Create your views here.
+def search_events(request):
+    if request.method == "POST":
+        form = EventSearchForm(request.POST)
+        
+        if form.is_valid():
+
+            #if form.cleaned_data.get('search_query') == None or form.cleaned_data.get('search_query') == " ":
+            #    return redirect('index')
+            
+            search_query = form.cleaned_data.get('search_query')
+            words_list = search_query.split()
+            
+            useless_words = ['of', 'at', 'the', 'with', 'a', 'an', 'on', 'in', 'by']
+
+            for word in words_list:
+                if word in useless_words:
+                    words_list.pop(word)
+            
+            tags = words_list
+            events = Event.objects.all().order_by('-date', '-registrations')
+            
+            top_priority_events = []
+            low_priority_events = []
+
+            relevance = []
+    
+            for event in events:
+                tag_frequency = 0
+                title_tags = event.title.split()
+                desc_tags = event.description.split()
+                desc = title_tags + desc_tags
+
+                for tag in tags:
+                    if tag in desc:
+                        top_priority_events.append(event)
+                        tag_frequency += 1
+                relevance.append(tag_frequency)
+
+            for event in events:
+                if event in top_priority_events:
+                    continue
+                else:
+                    low_priority_events.append(event)
+            
+            # Sorting events on basis of relevance
+            if len(top_priority_events) != len(relevance):
+                for i in range(len(top_priority_events) - len(relevance)):
+                    relevance.append(max(relevance))
+
+            for i in range(len(top_priority_events)):
+                for j in range(i+1, len(top_priority_events)):
+                    if relevance[i] < relevance[j]:
+                        (top_priority_events[i], top_priority_events[j]) = (top_priority_events[j], top_priority_events[i])
+
+            top_priority_events = list(dict.fromkeys(top_priority_events))
+
+            queryset = {
+                'top' : top_priority_events,
+                'low' : low_priority_events,
+                'query' : search_query
+            }
+
+            return render(request, 'events/search_results.htm', queryset)
+        else:
+            return redirect('index')
+    else:
+        form = EventSearchForm()
+        
+
+    return render(request, 'events/index.htm', {'form' : form})
+

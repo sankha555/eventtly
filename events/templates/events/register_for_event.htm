@@ -17,6 +17,14 @@
     integrity="sha384-7/Tl0k65OTvDSvtuq7aPR7aa0aCz7ZKqHsbMRLxhzueldW+9MZpCe9LB1c5UBuNS" crossorigin="anonymous">
   <link href="./assets/css/style.css" rel="stylesheet">
   <link href="./assets/img/favicon.png" rel="icon">
+
+  <style>
+    a:hover {
+      color: #00cc95;
+      text-decoration: none;
+    }
+  </style>
+
 </head>
 
 <div class="page">
@@ -27,7 +35,7 @@
 
       <div id="headlineContainer" class="loginForm__headlineContainer">
         <h1 id="headline" class="loginForm__headline">Register for</h1>
-        <h3>{{ event.title }}</h3>
+        <a href="{% url 'view_event' event.url %}"><h3>{{ event.title }}</h3></a>
       </div>
       <form id="submitForm" class="loginForm__form" method="POST">
         <div id="content" class="loginForm__content">

@@ -11,30 +11,39 @@ def custom_register(request):
     if request.method == 'POST':
         form = CustomRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            
             form.instance = request.user
-            request.user.username = form.cleaned_data.get('username')
-            request.user.name = form.cleaned_data.get('name')
-            request.user.email = form.cleaned_data.get('email')
-            request.user.password = form.cleaned_data.get('password')
-            request.user.save()
-            messages.success(request, f'Complete Your Profile!')
+            name = form.cleaned_data.get('name')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
             
-            # logging the user in
-            user = authenticate(email=form.cleaned_data['email'], password=form.cleaned_data['password'])
-            login(request, user)
+            try:
+                new_user = CustomUser.objects.create_user(
+                    username = username,
+                    name = name,
+                    email = email,
+                    password = password
+                )
+                new_user.save()
 
-            new_creator = Creator.objects.create(
-                user = request.user,
-                first_name = request.user.name.split('')[0],
-                last_name = request.user.name.split('')[-1],
-            )
-            new_creator.save()
-            
-            return redirect('profile')
+                # logging the user in
+                user = authenticate(email=form.cleaned_data['email'], password=form.cleaned_data['password'])
+                login(request, user)
+
+                new_creator = Creator.objects.create(
+                    user = request.user,
+                    first_name = request.user.name.split('')[0],
+                    last_name = request.user.name.split('')[-1],
+                )
+                new_creator.save()
+
+                return redirect('profile')
+
+            except:
+                redirect('custom_register')          
     else :
         form = CustomRegistrationForm()
-    return render(request, 'users/register.htm', {'form' : form})
+    return render(request, 'users/register-1.htm', {'form' : form})
 
 def register(request):
     if request.method == 'POST':

@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +42,14 @@
         <div class="logo mr-auto">
           <a href="{% url 'index' %}"><img src="{% static 'users/assets/img/logo.png' %}"></a>
         </div>
-
+        <!--
+        <form action="{% url 'search_events' %}" method="POST" style="left: auto; vertical-align: middle; width: 510px; margin-top: 14px; margin-right: 15px;" class="loginForm mr-auto">
+          {% csrf_token %}
+          <fieldset class="form-group">            
+            <input type="hidden" name="_token" value="WMpaeKwHpcZK5HGS0xCTCyLU7k4zy7bXkJbuuMcs">
+            <input type="text" class="form-control" name="search_query" id="search_query" placeholder=" &#x1F50D;   Search for Events" style="border-radius: 25px;">
+          </fieldset>
+        </form>-->
         <nav class="nav-menu d-none d-lg-block">
           <ul>
             <!--<li class="active"><a href="#header">Home</a></li>
@@ -91,16 +99,6 @@
     </div>
   </header><!-- End Header -->
     
- 
-  {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}" style="width: 1415px; margin-left: 10px;">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <center>{{ message }}</center>
-    </div>
-  {% endfor %}
-
   {% block content %}
     <!-- MAIN CONTENT OF THE WEBPAGE -->
   {% endblock %}
@@ -125,18 +123,18 @@
 <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
 <!-- Vendor JS Files -->
-<script src="{% static 'users/vendor/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'users/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'users/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
-<script src="{% static 'users/vendor/php-email-form/validate.js' %}"></script>
-<script src="{% static 'users/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
-<script src="{% static 'users/vendor/counterup/counterup.min.js' %}"></script>
-<script src="{% static 'users/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-<script src="{% static 'users/vendor/venobox/venobox.min.js' %}"></script>
-<script src="{% static 'users/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
-<script src="{% static 'users/vendor/aos/aos.js' %}"></script>
+<script src="{% static 'users/assets/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'users/assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/counterup/counterup.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/venobox/venobox.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+<script src="{% static 'users/assets/vendor/aos/aos.js' %}"></script>
 
-<script src="{% static 'users/js/main.js' %}"></script>
+<script src="{% static 'users/assets/js/main.js' %}"></script>
 </body>
 
 </html>

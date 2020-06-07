@@ -17,12 +17,12 @@
 
       <b><h6>Date and Time - <u>{{ object.date }}, {{ object.time }}</u></h6></b>
       <br>
-      <a class="btn btn-outline-info" href="{% url 'register_for_event' object.id %}">Register For Event</a>
+      <a class="btn btn-outline-info" href="{% url 'register_for_event' object.url %}">Register For Event</a>
       <br><br>
       {% if object.creator == user.creator %}
         <div>
-          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update_event' object.id %}">Update</a>
-          <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'delete_event' object.id %}">Delete</a>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'update_event' object.url %}">Update</a>
+          <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'delete_event' object.url %}">Delete</a>
         </div>
       {% endif %}
     </div>

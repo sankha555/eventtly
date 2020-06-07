@@ -1,14 +1,42 @@
 {% extends "events/base.htm" %}
+{% load crispy_forms_tags %}
 {% block content %}
 
+  <link href="../../../users/static/users/assets/css/style-normal.css" rel="stylesheet">
+  <style>
+    .btn-register {
+      font-family: "Poppins", sans-serif;
+      text-transform: uppercase;
+      background: #439b73;
+      height: 30px;
+      width: 160px;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 1px;
+      display: inline-block;
+      border-radius: 15px;
+      transition: 0.5s;
+      margin: 10px;
+      border: 2px solid #fff;
+      color: #fff;
+      margin-block-end: 10px;
+    }
+
+    .btn-register:hover {
+      background:  #00cc95;
+      border: 2px solid  #00cc95;
+    }
+
+  </style>
+
   <section id="hero" class="d-flex align-items-center">
-    <div class="container text-center position-relative">
+    <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
       <h1>60 SECONDS OR LESS</h1>
       <h2>Create your event webpage</h2>
       {% if user.is_autheniticated %}
         <a href="{% url 'create_event' %}" class="btn-get-started scrollto">POST YOUR EVENT</a>
       {% else %}
-        <a href="{% url 'register' %}"class="btn-get-started scrollto">POST YOUR EVENT</a>
+        <a href="{% url 'register' %}" class="btn-get-started scrollto">POST YOUR EVENT</a>
       {% endif %} 
     </div>
   </section>
@@ -22,18 +50,18 @@
         <div class="row counters">
   
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">232</span>
+            <span data-toggle="counter-up">{{ users.count }}</span>
             <p>Clients</p>
           </div>
   
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">521</span>
+            <span data-toggle="counter-up">{{ events.count }}</span>
             <p>Projects</p>
           </div>
   
           <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">1,463</span>
-            <p>Hours Of Support</p>
+            <span data-toggle="counter-up">{{ regs.count }}</span>
+            <p>Registrations</p>
           </div>
   
           <div class="col-lg-3 col-6 text-center">
@@ -45,6 +73,44 @@
   
       </div>
     </section><!-- End Counts Section -->
+
+    <!-- ======= Events List Section ======= -->
+    <section id="testimonials" class="testimonials section-bg">
+      <div class="container">
+    
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="section-title" data-aos="fade-right">
+              <h2>Events</h2>
+              <p>Check out the most trending events here and know about their dates and more. Click on register to sign up for an event.</p>
+            </div>
+          </div>
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="owl-carousel testimonials-carousel">
+              
+              {% for event in events %}
+                <div class="testimonial-item" >         
+                  <a href = "{% url 'view_event' event.url %}"><h3>{{ event.title }}</h3></a>
+                  <h4>{{ event.time }}, {{ event.date }}</h4>
+                  <br>
+                  <img src="{{ event.poster.url }}" width = 150px height = 130px alt="">
+                  <br>
+                  <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                    {{ event.description|slice:":30" }} ...
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  </p>
+                  <a href = "{% url 'register_for_event' event.url %}" ><button class="btn-register" >REGISTER</button></a>
+                </div>
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+    
+      </div>
+    </section><!-- End Testimonials Section -->
+
 
   </main><!-- End #main -->
 {% endblock content %}

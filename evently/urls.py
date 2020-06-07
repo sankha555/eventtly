@@ -23,12 +23,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('', include('events.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name='users/login.htm'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('accounts/', include('allauth.urls')),
+    path('login/', auth_views.LoginView.as_view(template_name = 'users/login.htm'), name = 'login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name = 'users/logout.htm'), name = 'logout'),
+
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
